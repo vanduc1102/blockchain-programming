@@ -2,9 +2,22 @@
 
 const ETH_GENESIS_ADDRESS = '0x0000000000000000000000000000000000000000'
 
+const Alert = {
+  show: (type = 'info', message = 'oh nooooo') => {
+    $('div.alert')
+      .removeClass()
+      .addClass('alert alert-' + type)
+      .html(message)
+  },
+  hide: () => {
+    $('div.alert')
+      .addClass('hide')
+  }
+}
+
 const App = {
   web3Provider: null,
-  web3: null,
+  web3Instance: null,
   contracts: {},
 
   init: async function () {
@@ -41,7 +54,7 @@ const App = {
     } else {
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545')
     }
-    App.web3 = new Web3(App.web3Provider)
+    App.web3Instance = new Web3(App.web3Provider)
     return App.initContract()
   },
 
@@ -66,6 +79,11 @@ const App = {
       adoptionInstance = instance
       return adoptionInstance.getAdopters.call()
     }).then(adopters => {
+      if (adopters[0].length === 2) {
+        Alert.show('danger', 'Contract is not deployed, run truffle migrate to deploy your contract.')
+        return
+      }
+
       for (let i = 0; i < adopters.length; i++) {
         if (adopters[i] !== ETH_GENESIS_ADDRESS) {
           $('.panel-pet')
@@ -87,7 +105,7 @@ const App = {
     let adoptionInstance
     const petId = parseInt($(event.target).data('id'))
 
-    App.web3.eth.getAccounts(function (error, accounts) {
+    App.web3Instance.eth.getAccounts(function (error, accounts) {
       if (error) {
         console.log(error)
         return
