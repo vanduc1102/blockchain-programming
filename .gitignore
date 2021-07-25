@@ -119,3 +119,7 @@ dist
 
 # use YARN
 package-lock.json
+
+# build project
+
+build
