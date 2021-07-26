@@ -24,5 +24,4 @@ you are now in [Interactive Console](https://geth.ethereum.org/docs/interface/ja
 - type `eth.syncing` to check the sync status. please wait until the result is `false`.
 - type `eth.accounts` to list all account.
 
-1. Open new console to add an existing account from Ganache.
 
